@@ -98,6 +98,20 @@ h1 {
     transform: translateY(1px);
 }
 
+.animal-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.animal-link:hover {
+    opacity: 0.75;
+}
+
 #theme-toggle {
     position: fixed;
     top: 1.2rem;
