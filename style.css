@@ -221,6 +221,18 @@ h1 {
     color: #e94560;
 }
 
+/* ── Disqus ── */
+.disqus-container {
+    background-color: var(--container-color);
+    padding: 2rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.23);
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+}
+
 @media (max-width: 600px) {
     .container {
         width: 90%;
