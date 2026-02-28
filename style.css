@@ -5,6 +5,19 @@
     --secondary-color: #0f3460;
     --text-color: #ffffff;
     --number-bg-color: #16213e;
+    --toggle-bg: #0f3460;
+    --toggle-color: #ffffff;
+}
+
+body.light-mode {
+    --bg-color: #f0f2f5;
+    --container-color: #ffffff;
+    --primary-color: #e94560;
+    --secondary-color: #cfd8e3;
+    --text-color: #1a1a2e;
+    --number-bg-color: #e2e8f0;
+    --toggle-bg: #e2e8f0;
+    --toggle-color: #1a1a2e;
 }
 
 body {
@@ -79,6 +92,27 @@ h1 {
 
 #generate:active {
     transform: translateY(1px);
+}
+
+#theme-toggle {
+    position: fixed;
+    top: 1.2rem;
+    right: 1.2rem;
+    background-color: var(--toggle-bg);
+    color: var(--toggle-color);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 100;
+}
+
+#theme-toggle:hover {
+    transform: scale(1.1);
 }
 
 @media (max-width: 600px) {
