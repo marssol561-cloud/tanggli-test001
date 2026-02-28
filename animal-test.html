@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>동물상 테스트 🐾</title>
+    <meta name="description" content="AI가 내 사진을 분석해 강아지상인지 고양이상인지 알려주는 재미있는 동물상 테스트. 사진을 업로드하면 바로 결과를 확인할 수 있어요.">
+    <title>동물상 테스트 – 나는 강아지상? 고양이상? | Lucky Tools</title>
     <meta name="google-adsense-account" content="ca-pub-7141621033478440">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7141621033478440"
      crossorigin="anonymous"></script>
@@ -37,35 +38,74 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 3.5rem 1rem 4rem;
+            padding: 5.5rem 1rem 3rem;
             gap: 1.6rem;
             transition: background 0.3s, color 0.3s;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%239C92AC' fill-opacity='0.1' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
         }
 
-        /* 테마 토글 */
-        #theme-toggle {
+        /* ── Navigation ── */
+        .site-nav {
             position: fixed;
-            top: 1.2rem; right: 1.2rem;
+            top: 0; left: 0; right: 0;
+            background: var(--card);
+            z-index: 200;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+            transition: background 0.3s;
+        }
+        .nav-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .nav-logo {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.2rem;
+        }
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            opacity: 0.7;
+            transition: opacity 0.2s, color 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            opacity: 1;
+            color: var(--primary);
+        }
+        #theme-toggle {
             background: var(--toggle-bg);
             color: var(--text);
             border: none;
             border-radius: 50%;
-            width: 44px; height: 44px;
-            font-size: 1.3rem;
+            width: 36px; height: 36px;
+            font-size: 1.1rem;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
             transition: background 0.3s, transform 0.2s;
-            z-index: 100;
+            flex-shrink: 0;
         }
         #theme-toggle:hover { transform: scale(1.1); }
 
-        /* 헤더 */
+        /* ── Header ── */
         .header { text-align: center; }
         .header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.4rem; }
         .header p { color: var(--subtext); font-size: 1rem; }
 
-        /* 카드 */
+        /* ── Card ── */
         .card {
             background: var(--card);
             border-radius: 20px;
@@ -76,14 +116,47 @@
             transition: background 0.3s;
         }
 
-        /* 업로드 영역 */
+        /* ── Info Card ── */
+        .info-card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 1.8rem 2rem;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: background 0.3s;
+        }
+        .info-card h2 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin: 0 0 1rem;
+        }
+        .info-card p {
+            font-size: 0.92rem;
+            line-height: 1.75;
+            opacity: 0.82;
+            margin-bottom: 0.8rem;
+        }
+        .info-card p:last-child { margin-bottom: 0; }
+        .info-list {
+            list-style: none;
+            padding: 0; margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            opacity: 0.82;
+        }
+        .info-list li::before { content: '✔ '; color: var(--primary); }
+
+        /* ── Upload ── */
         #upload-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1.2rem;
         }
-
         #drop-zone {
             width: 100%;
             min-height: 200px;
@@ -99,16 +172,14 @@
             transition: border-color 0.2s, background 0.2s;
             padding: 1.5rem;
         }
-        #drop-zone:hover,
-        #drop-zone.drag-over {
+        #drop-zone:hover, #drop-zone.drag-over {
             border-color: var(--primary);
-            background: rgba(233, 69, 96, 0.05);
+            background: rgba(233,69,96,0.05);
         }
         #drop-zone .dz-icon { font-size: 3rem; opacity: 0.5; }
         #drop-zone .dz-text { color: var(--subtext); font-size: 0.95rem; text-align: center; }
         #drop-zone .dz-hint { color: var(--subtext); font-size: 0.8rem; opacity: 0.7; }
 
-        /* 미리보기 */
         #preview-img {
             width: 100%;
             max-height: 280px;
@@ -116,7 +187,6 @@
             border-radius: 12px;
             display: none;
         }
-
         #file-input { display: none; }
 
         #upload-btn {
@@ -136,7 +206,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255,99,132,0.5);
         }
-
         #retry-btn {
             background: transparent;
             color: var(--subtext);
@@ -158,7 +227,7 @@
         }
         #status-msg.error { color: var(--primary); }
 
-        /* 결과 카드 */
+        /* ── Result ── */
         #result-card { display: none; }
 
         .bar-row { margin-bottom: 1.3rem; }
@@ -184,7 +253,6 @@
         .fill-dog { background: linear-gradient(90deg, #f4a261, #e76f51); }
         .fill-cat { background: linear-gradient(90deg, #a29bfe, #6c5ce7); }
 
-        /* 판정 */
         #verdict {
             text-align: center;
             margin-top: 1.5rem;
@@ -198,26 +266,47 @@
             font-weight: 800;
             margin: 0.5rem 0 0.3rem;
         }
-        #verdict .v-desc {
-            color: var(--subtext);
-            font-size: 0.95rem;
-            line-height: 1.65;
-        }
+        #verdict .v-desc { color: var(--subtext); font-size: 0.95rem; line-height: 1.65; }
         .dog-mode .v-title { color: #f4a261; }
         .cat-mode .v-title { color: #a29bfe; }
 
+        /* ── Footer ── */
+        .site-footer {
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text);
+            opacity: 0.45;
+            line-height: 1.9;
+            padding-top: 0.5rem;
+        }
+        .site-footer a { color: inherit; text-decoration: none; }
+        .footer-links { display: flex; justify-content: center; gap: 1.4rem; margin-bottom: 0.3rem; }
+
         @media (max-width: 480px) {
             .header h1 { font-size: 1.8rem; }
+            .nav-links { gap: 0.8rem; }
         }
     </style>
 </head>
 <body>
 
-<button id="theme-toggle" aria-label="테마 전환">🌙</button>
+<nav class="site-nav">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">🎰 Lucky Tools</a>
+        <ul class="nav-links">
+            <li><a href="index.html">로또 생성기</a></li>
+            <li><a href="animal-test.html" class="active">동물상 테스트</a></li>
+            <li><a href="about.html">소개</a></li>
+        </ul>
+        <button id="theme-toggle" aria-label="테마 전환">🌙</button>
+    </div>
+</nav>
 
 <div class="header">
     <h1>🐾 동물상 테스트</h1>
-    <p>사진을 올리면 강아지상인지 고양이상인지 알려드려요</p>
+    <p>사진을 올리면 강아지상인지 고양이상인지 AI가 분석해 드려요</p>
 </div>
 
 <div class="card">
@@ -256,6 +345,25 @@
     </div>
     <div id="verdict"></div>
 </div>
+
+<div class="info-card">
+    <h2>🤖 AI 동물상 분석이란?</h2>
+    <p>Google의 Teachable Machine으로 학습된 AI 모델이 얼굴 이미지의 특징을 분석해 강아지상 또는 고양이상으로 분류합니다. 재미를 위한 테스트이며, 모든 분석은 브라우저에서 직접 실행되어 업로드한 사진이 서버로 전송되지 않습니다.</p>
+    <ul class="info-list">
+        <li>사진이 외부 서버로 전송되지 않아 개인정보 안전</li>
+        <li>TensorFlow.js 기반으로 브라우저에서 직접 AI 실행</li>
+        <li>결과는 재미 목적이며 과학적 근거는 없음</li>
+        <li>정면 사진일수록 더 정확한 결과 제공</li>
+    </ul>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">소개</a>
+        <a href="privacy.html">개인정보처리방침</a>
+    </div>
+    <p>© 2025 Lucky Tools · 모든 권리 보유</p>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
@@ -311,20 +419,11 @@
         }
     })();
 
-    /* 업로드 버튼 → 파일 선택 */
-    uploadBtn.addEventListener('click', () => {
-        document.getElementById('file-input').click();
-    });
+    uploadBtn.addEventListener('click', () => document.getElementById('file-input').click());
 
-    /* 드래그 앤 드롭 */
     const dropZone = document.getElementById('drop-zone');
-    dropZone.addEventListener('click', () => {
-        document.getElementById('file-input').click();
-    });
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('drag-over');
-    });
+    dropZone.addEventListener('click', () => document.getElementById('file-input').click());
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
     dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
     dropZone.addEventListener('drop', (e) => {
         e.preventDefault();
@@ -333,13 +432,10 @@
         if (file && file.type.startsWith('image/')) handleFile(file);
     });
 
-    /* 파일 선택 */
     document.getElementById('file-input').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) handleFile(file);
+        if (e.target.files[0]) handleFile(e.target.files[0]);
     });
 
-    /* 다시 선택 */
     document.getElementById('retry-btn').addEventListener('click', () => {
         document.getElementById('file-input').value = '';
         resetUI();
@@ -368,8 +464,6 @@
             statusMsg.classList.add('error');
             return;
         }
-
-        /* 미리보기 표시 */
         const reader = new FileReader();
         reader.onload = async (e) => {
             const preview = document.getElementById('preview-img');
@@ -383,7 +477,6 @@
             statusMsg.textContent = '🔍 분석 중...';
             statusMsg.classList.remove('error');
 
-            /* 이미지 로드 후 예측 */
             const img = new Image();
             img.onload = async () => {
                 try {
@@ -404,12 +497,9 @@
     function showResult(dogProb, catProb) {
         const dogPct = Math.round(dogProb * 100);
         const catPct = Math.round(catProb * 100);
-
         document.getElementById('dog-pct').textContent = dogPct + '%';
         document.getElementById('cat-pct').textContent = catPct + '%';
         document.getElementById('result-card').style.display = 'block';
-
-        /* 바 애니메이션 (약간 딜레이 후 채움) */
         setTimeout(() => {
             document.getElementById('dog-bar').style.width = dogPct + '%';
             document.getElementById('cat-bar').style.width = catPct + '%';
@@ -417,23 +507,15 @@
 
         const verdict = document.getElementById('verdict');
         verdict.style.display = 'block';
-
         if (dogProb >= catProb) {
             const msg = DOG_MSGS[Math.floor(Math.random() * DOG_MSGS.length)];
             verdict.className = 'dog-mode';
-            verdict.innerHTML = `
-                <div class="v-emoji">🐶</div>
-                <div class="v-title">강아지상!</div>
-                <div class="v-desc">${msg}</div>`;
+            verdict.innerHTML = `<div class="v-emoji">🐶</div><div class="v-title">강아지상!</div><div class="v-desc">${msg}</div>`;
         } else {
             const msg = CAT_MSGS[Math.floor(Math.random() * CAT_MSGS.length)];
             verdict.className = 'cat-mode';
-            verdict.innerHTML = `
-                <div class="v-emoji">🐱</div>
-                <div class="v-title">고양이상!</div>
-                <div class="v-desc">${msg}</div>`;
+            verdict.innerHTML = `<div class="v-emoji">🐱</div><div class="v-title">고양이상!</div><div class="v-desc">${msg}</div>`;
         }
-
         statusMsg.textContent = '분석 완료!';
     }
 </script>
