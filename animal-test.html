@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동물상 테스트 🐾</title>
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --card: #2a2a4e;
+            --primary: #e94560;
+            --text: #ffffff;
+            --subtext: rgba(255, 255, 255, 0.6);
+            --input-bg: #16213e;
+            --toggle-bg: #0f3460;
+            --dog: #f4a261;
+            --cat: #a29bfe;
+        }
+        body.light {
+            --bg: #f0f2f5;
+            --card: #ffffff;
+            --text: #1a1a2e;
+            --subtext: rgba(26, 26, 46, 0.55);
+            --input-bg: #e2e8f0;
+            --toggle-bg: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3.5rem 1rem 4rem;
+            gap: 1.6rem;
+            transition: background 0.3s, color 0.3s;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%239C92AC' fill-opacity='0.1' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        /* 테마 토글 */
+        #theme-toggle {
+            position: fixed;
+            top: 1.2rem; right: 1.2rem;
+            background: var(--toggle-bg);
+            color: var(--text);
+            border: none;
+            border-radius: 50%;
+            width: 44px; height: 44px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            transition: background 0.3s, transform 0.2s;
+            z-index: 100;
+        }
+        #theme-toggle:hover { transform: scale(1.1); }
+
+        /* 헤더 */
+        .header { text-align: center; }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+        }
+        .header p {
+            color: var(--subtext);
+            font-size: 1rem;
+        }
+
+        /* 카드 */
+        .card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: background 0.3s;
+        }
+
+        /* 웹캠 영역 */
+        #webcam-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.4rem;
+        }
+        #webcam-wrap {
+            width: 260px; height: 260px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: var(--input-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        #webcam-wrap canvas {
+            width: 260px !important;
+            height: 260px !important;
+            object-fit: cover;
+        }
+        .cam-placeholder { font-size: 5rem; opacity: 0.25; }
+
+        #start-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 0.9rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(233,69,96,0.4);
+            transition: all 0.3s;
+        }
+        #start-btn:hover {
+            background: #ff6384;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,99,132,0.5);
+        }
+        #start-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        #loading-msg {
+            color: var(--subtext);
+            font-size: 0.9rem;
+            display: none;
+        }
+        #error-msg {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+        }
+
+        /* 결과 카드 */
+        #result-card { display: none; }
+
+        .bar-row { margin-bottom: 1.3rem; }
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.45rem;
+        }
+        .bar-track {
+            background: var(--input-bg);
+            border-radius: 99px;
+            height: 18px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 99px;
+            width: 0%;
+            transition: width 0.25s ease;
+        }
+        .fill-dog { background: linear-gradient(90deg, #f4a261, #e76f51); }
+        .fill-cat { background: linear-gradient(90deg, #a29bfe, #6c5ce7); }
+
+        /* 판정 */
+        #verdict {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--input-bg);
+            display: none;
+        }
+        #verdict .v-emoji { font-size: 3.8rem; line-height: 1; }
+        #verdict .v-title {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin: 0.5rem 0 0.3rem;
+        }
+        #verdict .v-desc {
+            color: var(--subtext);
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+        .dog-mode .v-title { color: #f4a261; }
+        .cat-mode .v-title { color: #a29bfe; }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.8rem; }
+            #webcam-wrap { width: 220px; height: 220px; }
+            #webcam-wrap canvas { width: 220px !important; height: 220px !important; }
+        }
+    </style>
+</head>
+<body>
+
+<button id="theme-toggle" aria-label="테마 전환">🌙</button>
+
+<div class="header">
+    <h1>🐾 동물상 테스트</h1>
+    <p>웹캠으로 알아보는 나의 동물상</p>
+</div>
+
+<div class="card">
+    <div id="webcam-section">
+        <div id="webcam-wrap">
+            <span class="cam-placeholder">📷</span>
+        </div>
+        <button id="start-btn" onclick="init()">테스트 시작하기</button>
+        <span id="loading-msg">⏳ 모델 불러오는 중...</span>
+        <span id="error-msg"></span>
+    </div>
+</div>
+
+<div class="card" id="result-card">
+    <div class="bar-row">
+        <div class="bar-label">
+            <span>🐶 강아지상</span>
+            <span id="dog-pct">0%</span>
+        </div>
+        <div class="bar-track">
+            <div class="bar-fill fill-dog" id="dog-bar"></div>
+        </div>
+    </div>
+    <div class="bar-row">
+        <div class="bar-label">
+            <span>🐱 고양이상</span>
+            <span id="cat-pct">0%</span>
+        </div>
+        <div class="bar-track">
+            <div class="bar-fill fill-cat" id="cat-bar"></div>
+        </div>
+    </div>
+    <div id="verdict"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+<script>
+    const MODEL_URL = 'https://teachablemachine.withgoogle.com/models/eUVxzVlrB/';
+    let model, webcam, maxPredictions;
+    let dogIndex = 0, catIndex = 1;
+    let lastResult = '';
+
+    const DOG_MSGS = [
+        '충성스럽고 따뜻한 매력이 넘쳐요!',
+        '밝고 에너지 넘치는 성격이에요!',
+        '사람들과 잘 어울리는 친화력이 있어요!',
+    ];
+    const CAT_MSGS = [
+        '신비롭고 우아한 매력이 있어요!',
+        '독립적이고 세련된 분위기예요!',
+        '쿨하고 감성적인 스타일이에요!',
+    ];
+
+    /* 테마 토글 */
+    const themeBtn = document.getElementById('theme-toggle');
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light');
+        themeBtn.textContent = '☀️';
+    }
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light');
+        const isLight = document.body.classList.contains('light');
+        themeBtn.textContent = isLight ? '☀️' : '🌙';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+
+    /* 초기화 */
+    async function init() {
+        const btn = document.getElementById('start-btn');
+        const loadingMsg = document.getElementById('loading-msg');
+        const errorMsg = document.getElementById('error-msg');
+
+        btn.disabled = true;
+        btn.textContent = '로딩 중...';
+        loadingMsg.style.display = 'block';
+        errorMsg.style.display = 'none';
+
+        try {
+            model = await tmImage.load(MODEL_URL + 'model.json', MODEL_URL + 'metadata.json');
+            maxPredictions = model.getTotalClasses();
+
+            /* 클래스 인덱스 자동 감지 */
+            const dummy = document.createElement('canvas');
+            dummy.width = dummy.height = 1;
+            const sample = await model.predict(dummy);
+            sample.forEach((p, i) => {
+                const n = p.className.toLowerCase();
+                if (n.includes('dog') || n.includes('강아지')) dogIndex = i;
+                else if (n.includes('cat') || n.includes('고양이')) catIndex = i;
+            });
+
+            webcam = new tmImage.Webcam(260, 260, true);
+            await webcam.setup();
+            await webcam.play();
+
+            const wrap = document.getElementById('webcam-wrap');
+            wrap.innerHTML = '';
+            wrap.appendChild(webcam.canvas);
+
+            btn.style.display = 'none';
+            loadingMsg.style.display = 'none';
+            document.getElementById('result-card').style.display = 'block';
+            document.getElementById('verdict').style.display = 'block';
+
+            window.requestAnimationFrame(loop);
+        } catch (err) {
+            btn.disabled = false;
+            btn.textContent = '다시 시도하기';
+            loadingMsg.style.display = 'none';
+            errorMsg.textContent = '⚠️ 카메라 접근 또는 모델 로딩에 실패했습니다.';
+            errorMsg.style.display = 'block';
+        }
+    }
+
+    async function loop() {
+        webcam.update();
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+        const preds = await model.predict(webcam.canvas);
+
+        const dogProb = preds[dogIndex]?.probability ?? 0;
+        const catProb = preds[catIndex]?.probability ?? 0;
+
+        const dogPct = Math.round(dogProb * 100);
+        const catPct = Math.round(catProb * 100);
+
+        document.getElementById('dog-pct').textContent = dogPct + '%';
+        document.getElementById('cat-pct').textContent = catPct + '%';
+        document.getElementById('dog-bar').style.width = dogPct + '%';
+        document.getElementById('cat-bar').style.width = catPct + '%';
+
+        const verdict = document.getElementById('verdict');
+        if (dogProb >= catProb) {
+            if (lastResult !== 'dog') {
+                const msg = DOG_MSGS[Math.floor(Math.random() * DOG_MSGS.length)];
+                verdict.className = 'dog-mode';
+                verdict.innerHTML = `
+                    <div class="v-emoji">🐶</div>
+                    <div class="v-title">강아지상!</div>
+                    <div class="v-desc">${msg}</div>`;
+                lastResult = 'dog';
+            }
+        } else {
+            if (lastResult !== 'cat') {
+                const msg = CAT_MSGS[Math.floor(Math.random() * CAT_MSGS.length)];
+                verdict.className = 'cat-mode';
+                verdict.innerHTML = `
+                    <div class="v-emoji">🐱</div>
+                    <div class="v-title">고양이상!</div>
+                    <div class="v-desc">${msg}</div>`;
+                lastResult = 'cat';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
